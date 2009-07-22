@@ -42,21 +42,27 @@ config_register_list(
         default="1.00",
         ordering=3),
 
-    BooleanValue(SHIPPING_GROUP,
+    StringValue(SHIPPING_GROUP,
         'POSTDK_PACKING',
-        description=_("Pack in one package?"),
-        help_text=_("Check if you want to pack the entire order in a \
-                    single package. Note maximum dimensions used is \
-                    100 x 50 x 50 cm."),
+        description=_("Packaging"),
+        help_text=_("Choose how you would like to pack your pakages. Packing \
+                    will be optimised to avoid high weight and volume fees \
+                    when possible."),
+        choices=(
+                    (("SINGLE", "All products in a single package")),
+                    (("PRODUCT", "One package per product type")),
+                    (("CART", "One package per cart item")),
+        ),
         requires=SHIP_MODULES,
         requiresvalue='shipping.modules.postdk',
-        default=True,
+        default='PRODUCT',
         ordering=4),
 
     StringValue(SHIPPING_GROUP,
         'POSTDK_DEFAULT_SIZE_UNITS',
-        description=_("Enter the units for the default size of your package"),
-        help_text=_("Currently units supported: \"cm\" = centimeters"),
+        description=_("Default size units"),
+        help_text=_("Enter the units for the default size of your package. \
+                    Currently units supported: \"cm\" = centimeters"),
         requires=SHIP_MODULES,
         requiresvalue='shipping.modules.postdk',
         default="cm",
@@ -93,10 +99,10 @@ config_register_list(
         ordering=7),
 
     StringValue(SHIPPING_GROUP,
-        'POSTDK_DEFAULT_WEIGHT_UNITS',
-        description=_("Enter the units for the default weigth of your \
-                        package"),
-        help_text=_("Currently units supported: \"kg\" = kilo grams"),
+        'POSTDK_DEFAULT_WEIGHT_UNIT',
+        description=_("Default weight unit"),
+        help_text=_("Enter the units for the default weigth of your package. \
+                    Currently units supported: \"kg\" = kilo grams"),
         requires=SHIP_MODULES,
         requiresvalue='shipping.modules.postdk',
         default="kg",
