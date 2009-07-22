@@ -73,14 +73,14 @@ config_register_list(
         ordering=6),
         
     DecimalValue(SHIPPING_GROUP,
-        'POSTDK_LENGTH_UNITS',
+        'POSTDK_DEFAULT_WIDTH',
         description=_("Default width of package"),
         help_text=_("This is used if you haven't entered a value for for \
                     the product's width."),
         requires=SHIP_MODULES,
         requiresvalue='shipping.modules.postdk',
         default="25.00",
-        ordering=7),
+        ordering=8),
 
     DecimalValue(SHIPPING_GROUP,
         'POSTDK_DEFAULT_HEIGHT',
@@ -90,7 +90,7 @@ config_register_list(
         requires=SHIP_MODULES,
         requiresvalue='shipping.modules.postdk',
         default="25.00",
-        ordering=8),
+        ordering=7),
 
     StringValue(SHIPPING_GROUP,
         'POSTDK_DEFAULT_WEIGHT_UNITS',
