@@ -49,9 +49,9 @@ config_register_list(
                     will be optimised to avoid high weight and volume fees \
                     when possible."),
         choices=(
-                    (("SINGLE", "All products in a single package")),
-                    (("PRODUCT", "One package per product type")),
-                    (("CART", "One package per cart item")),
+                    (("SINGLE", "All products in a single parcel")),
+                    (("PRODUCT", "One parcel per product type")),
+                    (("CART", "One parcel per cart item")),
         ),
         requires=SHIP_MODULES,
         requiresvalue='shipping.modules.postdk',
@@ -61,7 +61,7 @@ config_register_list(
     StringValue(SHIPPING_GROUP,
         'POSTDK_DEFAULT_SIZE_UNITS',
         description=_("Default size units"),
-        help_text=_("Choose the units for the default size of your package."),
+        help_text=_("Choose the units for the default size of your parcel."),
         choices=(
                     (("cm", "cm - centimeters")),
         ),
@@ -72,7 +72,7 @@ config_register_list(
 
     DecimalValue(SHIPPING_GROUP,
         'POSTDK_DEFAULT_LENGTH',
-        description=_("Default length of package"),
+        description=_("Default length of parcel"),
         help_text=_("This is used if you haven't entered a value for for \
                     the product's length."),
         requires=SHIP_MODULES,
@@ -82,7 +82,7 @@ config_register_list(
         
     DecimalValue(SHIPPING_GROUP,
         'POSTDK_DEFAULT_WIDTH',
-        description=_("Default width of package"),
+        description=_("Default width of parcel"),
         help_text=_("This is used if you haven't entered a value for for \
                     the product's width."),
         requires=SHIP_MODULES,
@@ -92,7 +92,7 @@ config_register_list(
 
     DecimalValue(SHIPPING_GROUP,
         'POSTDK_DEFAULT_HEIGHT',
-        description=_("Default height of package"),
+        description=_("Default height of parcel"),
         help_text=_("This is used if you haven't entered a value for for \
                     the product's height."),
         requires=SHIP_MODULES,
@@ -104,7 +104,7 @@ config_register_list(
         'POSTDK_DEFAULT_WEIGHT_UNIT',
         description=_("Default weight unit"),
         help_text=_("Choose the units for the default weigth of your \
-                    package."),
+                    parcel."),
         choices=(
                     (("kg", "kg - kilogram")),
         ),
@@ -115,7 +115,7 @@ config_register_list(
 
     DecimalValue(SHIPPING_GROUP,
         'POSTDK_DEFAULT_WEIGHT',
-        description=_("Default weight of package"),
+        description=_("Default weight of parcel"),
         help_text=_("This is used if you haven't entered a value for for \
                     the product's weight."),
         requires=SHIP_MODULES,
