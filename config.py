@@ -61,8 +61,10 @@ config_register_list(
     StringValue(SHIPPING_GROUP,
         'POSTDK_DEFAULT_SIZE_UNITS',
         description=_("Default size units"),
-        help_text=_("Enter the units for the default size of your package. \
-                    Currently units supported: \"cm\" = centimeters"),
+        help_text=_("Choose the units for the default size of your package."),
+        choices=(
+                    (("cm", "cm - centimeters")),
+        ),
         requires=SHIP_MODULES,
         requiresvalue='shipping.modules.postdk',
         default="cm",
@@ -101,8 +103,11 @@ config_register_list(
     StringValue(SHIPPING_GROUP,
         'POSTDK_DEFAULT_WEIGHT_UNIT',
         description=_("Default weight unit"),
-        help_text=_("Enter the units for the default weigth of your package. \
-                    Currently units supported: \"kg\" = kilo grams"),
+        help_text=_("Choose the units for the default weigth of your \
+                    package."),
+        choices=(
+                    (("kg", "kg - kilogram")),
+        ),
         requires=SHIP_MODULES,
         requiresvalue='shipping.modules.postdk',
         default="kg",
@@ -118,4 +123,3 @@ config_register_list(
         default="5.00",
         ordering=10),
 )
-
