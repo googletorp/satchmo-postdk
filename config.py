@@ -50,13 +50,25 @@ config_register_list(
                     when possible."),
         choices=(
                     (("SINGLE", "All products in a single parcel")),
-                    (("PRODUCT", "One parcel per product type")),
+                    #(("PRODUCT", "One parcel per product type")),
                     (("CART", "One parcel per cart item")),
         ),
         requires=SHIP_MODULES,
         requiresvalue='shipping.modules.postdk',
         default='PRODUCT',
         ordering=4),
+
+    DecimalValue(SHIPPING_GROUP,
+        'POSTDK_PERCENT_VOLUME',
+        description=_("Percent volume usage"),
+        help_text=_("As Post Danmark has a volume fee, if a package is \
+                    larger than 50x50x100 cm, set how many percent of such \
+                    a parcel would be used in averedge. Used to calculate \
+                    when a new parcel is needed if many items are ordered."),
+        requires=SHIP_MODULES,
+        requiresvalue='shipping.modules.postdk',
+        default="80.00",
+        ordering=5),
 
     StringValue(SHIPPING_GROUP,
         'POSTDK_DEFAULT_SIZE_UNITS',
@@ -68,7 +80,7 @@ config_register_list(
         requires=SHIP_MODULES,
         requiresvalue='shipping.modules.postdk',
         default="cm",
-        ordering=5),
+        ordering=6),
 
     DecimalValue(SHIPPING_GROUP,
         'POSTDK_DEFAULT_LENGTH',
@@ -78,7 +90,7 @@ config_register_list(
         requires=SHIP_MODULES,
         requiresvalue='shipping.modules.postdk',
         default="50.00",
-        ordering=6),
+        ordering=7),
         
     DecimalValue(SHIPPING_GROUP,
         'POSTDK_DEFAULT_WIDTH',
@@ -88,7 +100,7 @@ config_register_list(
         requires=SHIP_MODULES,
         requiresvalue='shipping.modules.postdk',
         default="25.00",
-        ordering=8),
+        ordering=9),
 
     DecimalValue(SHIPPING_GROUP,
         'POSTDK_DEFAULT_HEIGHT',
@@ -98,7 +110,7 @@ config_register_list(
         requires=SHIP_MODULES,
         requiresvalue='shipping.modules.postdk',
         default="25.00",
-        ordering=7),
+        ordering=8),
 
     StringValue(SHIPPING_GROUP,
         'POSTDK_DEFAULT_WEIGHT_UNITS',
@@ -111,7 +123,7 @@ config_register_list(
         requires=SHIP_MODULES,
         requiresvalue='shipping.modules.postdk',
         default="kg",
-        ordering=9),
+        ordering=10),
 
     DecimalValue(SHIPPING_GROUP,
         'POSTDK_DEFAULT_WEIGHT',
@@ -121,5 +133,5 @@ config_register_list(
         requires=SHIP_MODULES,
         requiresvalue='shipping.modules.postdk',
         default="5.00",
-        ordering=10),
+        ordering=11),
 )

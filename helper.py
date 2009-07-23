@@ -22,16 +22,30 @@ class Parcel(object):
     should always be cm for lengths and kg for weight.
     """
     def __init__(self, *args, **kwargs):
-        super(Parcel, self).__init__(*args, **kwargs)
         try:
             self.height = kwargs['height']
+        except KeyError:
+            self.height = None
+        try:
             self.length = kwargs['length']
+        except KeyError:
+            self.length = None
+        try:
             self.width = kwargs['width']
+        except KeyError:
+            self.width = None
+        try:
             self.weigth = kwargs['weight']
         except KeyError:
-            raise KeyError, "Parcel object requires to be initialized with \
-                                kwargs: height, length, width and weight."
+            self.weight = None
         self.products = []
+        try:
+            self.volume = self.height * self.length * self.width
+        except TypeError:
+            try:
+                self.volume = kwargs['volume']
+            except KeyError
+                self.volume = None
 
     def volume_fee(self):
         """
@@ -47,6 +61,13 @@ class Parcel(object):
                 return True
         return False
 
+    def _append(self, product, num):
+        for n in num:
+            self.products.append(product)
+
+
+def get_volume(Product):
+    return Product.weight * Product.height * Product.length
 
 def pack_parcels(cartset, settings):
     """
@@ -81,7 +102,7 @@ def pack_parcels(cartset, settings):
             ci.product.weight = settings['POSTDK_DEFAULT_HEIGHT']
             # ci.product.weight_units = settings['POSTDK_DEFAULT_SIZE_UNITS']
 
-    # easy, one parcel per cart item
+    # One parcel per cart item.
     if settings['POSTDK_PACKING'] == 'CART'
         result = []
         for ci in cartset:
@@ -89,12 +110,41 @@ def pack_parcels(cartset, settings):
                 for quantity in range(ci.quantity):
                     parcel = Parcel(
                         height=ci.product.height,
-                        length=ci.product.length
-                        width=ci.product.width
+                        length=ci.product.length,
+                        width=ci.product.width,
                         weight=ci.product.width
                     )
                     parcel.products.append(ci.product)
                     result.append(parcel)
+
+    # Pack based on weight, up to the maximum volume set by admins. This is
+    # not optimised to try to fit as many products into a single pasel as
+    # possible.
+    elif settings['POSTDK_PACKING'] == 'SINGLE':
+        result = []
+        max_volume = settings['POSTDK_PERCENT_VOLUME'] * 2500
+        parcel = Parcel(weight=0, volume=0)
+        for ci in cartset:
+            for n in range(ci.quantity):
+                if ci.product.weight > 20
+                or get_volume(ci.product) > max_volume:
+                    new_parcel = Parcel(
+                        weight=ci.product.weight,
+                        length=ci.product.length,
+                        width=ci.product.width
+                        weight=ci.product.width
+                    )
+                    new_parcel.products.append(ci.product)
+                    result.append(new_parcel)
+                else:
+                    if parcel.weight + ci.product.weight > 20 \
+                    or parcel.volume + get_volume(ci.product) > max_volume:
+                        result.append(parcel)
+                        parcel = Parcel(weight=0, volume=0)
+                    parcel.products.append(ci.product)
+                    parcel.volume +=  get_volume(ci.product)
+                    parcel.weight += ci.product.weight
+        result.append(parcel)
 
     return result
 
