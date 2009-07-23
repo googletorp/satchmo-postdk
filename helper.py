@@ -46,4 +46,55 @@ class Parcel(object):
             if count > 1:
                 return True
         return False
-        
+
+
+def pack_parcels(cartset, settings):
+    """
+    Function used to calculate how to pack parcels.
+
+    This function will fist go through all the products in the cart
+    QuerySet and set default values on size and weight where needed.
+    Then it will calculate how to best pack the products in parcels,
+    given the settings set.
+
+    cartset = Queryset of the cart
+    settings: the postdk livesettings
+    """
+
+    # set all the size values if one is missing:
+    for ci in cartset:
+        product = ci.product
+        default = False
+        if not (product.width and product.height and product.lenght):
+            default = True
+        if not (product.width_units.lower() and products.length_units.lower() \
+                and product.height_units.lower()) != 'cm':
+            default = True
+        if default:
+            ci.product.width = settings['POSTDK_DEFAULT_WIDTH']
+            # ci.product.width_units = settings['POSTDK_DEFAULT_SIZE_UNITS']
+            ci.product.length = settings['POSTDK_DEFAULT_LENGTH']
+            # ci.product.length_units = settings['POSTDK_DEFAULT_SIZE_UNITS']
+            ci.product.height = settings['POSTDK_DEFAULT_HEIGHT']
+            # ci.product.height_units = settings['POSTDK_DEFAULT_SIZE_UNITS']
+        if not product.weight or product.weight_units.lower() != 'kg':
+            ci.product.weight = settings['POSTDK_DEFAULT_HEIGHT']
+            # ci.product.weight_units = settings['POSTDK_DEFAULT_SIZE_UNITS']
+
+    # easy, one parcel per cart item
+    if settings['POSTDK_PACKING'] == 'CART'
+        result = []
+        for ci in cartset:
+            if ci.product.is_shippable:
+                for quantity in range(ci.quantity):
+                    parcel = Parcel(
+                        height=ci.product.height,
+                        length=ci.product.length
+                        width=ci.product.width
+                        weight=ci.product.width
+                    )
+                    parcel.products.append(ci.product)
+                    result.append(parcel)
+
+    return result
+

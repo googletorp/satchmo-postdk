@@ -101,7 +101,7 @@ config_register_list(
         ordering=7),
 
     StringValue(SHIPPING_GROUP,
-        'POSTDK_DEFAULT_WEIGHT_UNIT',
+        'POSTDK_DEFAULT_WEIGHT_UNITS',
         description=_("Default weight unit"),
         help_text=_("Choose the units for the default weigth of your \
                     parcel."),
