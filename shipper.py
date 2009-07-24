@@ -7,21 +7,30 @@ By Jakob Torp Svendsen - googletorp
 - This module is still in development
 """
 
-import pdb
-
-
-# Note, make sure you use decimal math everywhere!
 try:
     from decimal import Decimal
 except:
     from django.utils._decimal import Decimal
 
 from django.utils.translation import ugettext as _
+
+from livesettings import config_get_group
 from shipping.modules.base import BaseShipper
+from shipping.modules.postdk.helper import pack_parcels
+
+# Fees as per January 1st, 2009.
+POSTDK_FEES = {
+    'max_5': Decimal("75.00"),
+    'max_10': Decimal("100.00"),
+    'max_20': Decimal("160.00"),
+    'volume': Decimal("76.00"),
+    'fragile': Decimal("76.00"),
+}
+
+
 
 class Shipper(BaseShipper):
 
-    flatRateFee = Decimal("15.00")
     id = "PostDK"
         
     def __str__(self):
@@ -42,14 +51,25 @@ class Shipper(BaseShipper):
         Complex calculations can be done here, as long as the return value is
         a decimal figure.
         """
-        test = self.cart.cartitem_set.all()
-        test1 = test[0]
-        pdb.set_trace()
-        help_a = help[0]
-        
-        raise
-        assert(self._calculated)
-        return(self.flatRateFee)
+        cartset = self.cart.cartitem_set.all()
+        settings = config_get_group('shipping.modules.postdk')
+        parcel_list = pack_parcels(cartset, settings)
+        result = Decimal("0.00")
+        for parcel in parcel_list:
+            if parcel.weight <= 5:
+                result += POSTDK_FEES['max_5']
+            elif parcel.weight <= 10:
+                result += POSTDK_FEES['max_10']
+            elif parcel.weight <= 20:
+                result += POSTDK_FEES['max_20']
+            else:
+                # TODO, raise error as we currently don't accept parcels over
+                # 20 kg, or parcel has no weight.
+                pass
+            if parcel.volume_fee():
+                result += POSTDK_FEES['volume']
+            result *= settings['POSTDK_CURRENCY'].value
+        return result
 
     def method(self):
         """
