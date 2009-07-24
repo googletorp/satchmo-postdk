@@ -68,7 +68,8 @@ class Shipper(BaseShipper):
                 pass
             if parcel.volume_fee():
                 result += POSTDK_FEES['volume']
-            result *= settings['POSTDK_CURRENCY'].value
+        result += settings['POSTDK_HANDLING'].value
+        result *= settings['POSTDK_CURRENCY'].value
         return result
 
     def method(self):
@@ -81,7 +82,7 @@ class Shipper(BaseShipper):
         """
         Can be a plain string or complex calcuation returning an actual date.
         """
-        return _("3 - 4 business days")
+        return settings['POSTDK_DAYS'].value
 
     def valid(self, order=None):
         """
@@ -89,5 +90,11 @@ class Shipper(BaseShipper):
         For example, may check to see if the recipient is in an allowed
         country or location.
         """
+        # Only allow sending to Denmark for now. This is not a good way of
+        # doing this, as it will simply disable the module.
+        # TODO Need to figure out how to do better error handling with
+        # satchmo.
+        if not self.contact.shipping_address.country_id == 59:
+            return False
         return True
 
